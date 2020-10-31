@@ -26,7 +26,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const InnerHeaderWrapper = styled.div`
-  width: 900px;
+  width: 1000px;
   max-width: 80%;
   display: flex;
   justify-content: space-between;

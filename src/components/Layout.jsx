@@ -1,11 +1,12 @@
 import React from "react";
 
-import Header from "./Header";
-
 import { normalize } from "react-style-reset/string";
 import styled, { createGlobalStyle } from "styled-components";
 
 import { Helmet } from "react-helmet";
+
+import Header from "./Header";
+import Footer from "./Footer";
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -13,13 +14,22 @@ const GlobalStyles = createGlobalStyle`
   }
 
   ${normalize};
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 `;
 
 const ContentWrapper = styled.main`
-  width: 900px;
+  width: 1000px;
   max-width: 80%;
   margin: 5px auto;
-`
+`;
+
+const OuterContentWrapper = styled.div``;
 
 function Layout({ title, children }) {
   return (
@@ -32,8 +42,11 @@ function Layout({ title, children }) {
         <title>GO-PC Build | {title}</title>
       </Helmet>
       <GlobalStyles />
-      <Header />
-      <ContentWrapper>{children}</ContentWrapper>
+      <OuterContentWrapper>
+        <Header />
+        <ContentWrapper>{children}</ContentWrapper>
+      </OuterContentWrapper>
+      <Footer />
     </React.Fragment>
   );
 }
