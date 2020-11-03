@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import icon from "../assets/Icon.png";
 import { std } from "../theme/theme";
+import { Link } from "react-router-dom";
 
 // const icon = lazy(() => import("../assets/Icon.png"));
 
@@ -33,12 +34,21 @@ const InnerHeaderWrapper = styled.div`
   align-items: center;
 `;
 
-const HeaderIcon = styled.img`
-  width: ${headerConfig.height - 10}px;
-  height: ${headerConfig.height - 10}px;
+const LoadingAnimation = keyframes`
+  0% { background-color: hsl(360, 0%, 50%); }
+  66.66% { background-color: hsl(360, 0%, 60%); }
+  100% { background-color: hsl(360, 0%, 50%); }
 `;
 
 const HeaderIconFallback = styled.div`
+  border-radius: 3px;
+  width: ${headerConfig.height - 10}px;
+  height: ${headerConfig.height - 10}px;
+  background-color: hsl(360, 0%, 50%);
+  animation: 1s ${LoadingAnimation} infinite ease-in-out;
+`;
+
+const HeaderIcon = styled.img`
   width: ${headerConfig.height - 10}px;
   height: ${headerConfig.height - 10}px;
 `;
@@ -50,7 +60,7 @@ const HeaderNavigationWrapper = styled.nav`
   grid-template-columns: repeat(${headerConfig.hrefs.length}, auto);
 `;
 
-const HeaderNavigationItem = styled.a`
+const HeaderNavigationItem = styled(Link)`
   height: 100%;
   display: flex;
   align-items: center;
@@ -73,7 +83,7 @@ function Header() {
         </Suspense>
         <HeaderNavigationWrapper>
           {headerConfig.hrefs.map((item) => (
-            <HeaderNavigationItem href={item[0]}>
+            <HeaderNavigationItem to={item[0]}>
               {item[1]}
             </HeaderNavigationItem>
           ))}
