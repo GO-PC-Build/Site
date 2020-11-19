@@ -76,6 +76,7 @@ function LoginPage() {
             type="text"
             name="name"
             id="name"
+            autoComplete="username"
             placeholder="Jouw gebruikersnaam of mail adress"
             ref={register({ required: true })}
           />
@@ -85,6 +86,7 @@ function LoginPage() {
             type="password"
             name="password"
             id="password"
+            autoComplete="current-password"
             placeholder="Jouw wachtwoord"
             ref={register({ required: true })}
           />
