@@ -29,6 +29,7 @@ const login = async (name, password) => {
 };
 
 const getCurrentUser = async () => {
+  console.log(`API ROOT: ${axios.defaults.baseURL}`);
   try {
     const res = await axios.get("@me");
     return res.data;
