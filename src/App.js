@@ -1,19 +1,20 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import {
-  BrowserRouter as Router,
   Redirect,
   Route,
+  BrowserRouter as Router,
   Switch,
 } from "react-router-dom";
-import { normalize } from "react-style-reset/string";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
-// General site layout component
+
+import { Helmet } from "react-helmet";
 import Layout from "./components/Layout";
+import { normalize } from "react-style-reset/string";
 import { std } from "./theme/theme";
-import {Helmet} from "react-helmet";
 
 // Page components
 const HomePage = lazy(() => import("./pages/index"));
+const LoginPage = lazy(() => import("./pages/login"));
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -56,7 +57,12 @@ const LoaderAnimation = keyframes`
 const Loader = styled.div`
   position: relative;
   background: ${std.lightup};
-  background: linear-gradient(90deg, ${std.lightup}0f 0%, ${std.lightup}80 40%, ${std.lightup} 100%);
+  background: linear-gradient(
+    90deg,
+    ${std.lightup}0f 0%,
+    ${std.lightup}80 40%,
+    ${std.lightup} 100%
+  );
   width: 25px;
   height: 25px;
   border-radius: 50%;
@@ -116,11 +122,12 @@ function App() {
   return (
     <Router>
       <GlobalStyles />
-        <Helmet>
+      <Helmet>
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
           rel="stylesheet"
-        /></Helmet>
+        />
+      </Helmet>
       <Suspense fallback={<Loading />}>
         <Switch>
           <Route
@@ -129,6 +136,15 @@ function App() {
             render={() => (
               <Layout title="Home">
                 <HomePage />
+              </Layout>
+            )}
+          />
+          <Route
+            exact
+            path="/login"
+            render={() => (
+              <Layout title="Aanmelden of Registreren">
+                <LoginPage />
               </Layout>
             )}
           />
@@ -143,7 +159,7 @@ function App() {
           />
           <Route exact path="/loading" component={Loading} />
           <Route exact path="/index" render={() => <Redirect to="/" />} />
-          <Redirect to="/404" />
+          <Redirect to="/" />
         </Switch>
       </Suspense>
     </Router>

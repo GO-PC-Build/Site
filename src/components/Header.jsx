@@ -1,8 +1,11 @@
 import React, { Suspense } from "react";
 import styled, { keyframes } from "styled-components";
+
+import { Link } from "react-router-dom";
+import { getCookie } from "../utils/CookieInteraction";
+import { getCurrentUser } from "../utils/APIInteraction";
 import icon from "../assets/Icon.png";
 import { std } from "../theme/theme";
-import { Link } from "react-router-dom";
 
 // const icon = lazy(() => import("../assets/Icon.png"));
 
@@ -12,7 +15,6 @@ const headerConfig = {
     ["./index", "Home"],
     ["./about", "Over Ons"],
     ["./quizz", "Quizz"],
-    ["./login", "Aanmelden/Registreren"],
   ],
 };
 
@@ -54,14 +56,15 @@ const HeaderIcon = styled.img`
 `;
 
 const HeaderNavigationWrapper = styled.nav`
-  height: 100%;
+  height: ${headerConfig.height}px;
   display: grid;
   grid-gap: 15px;
-  grid-template-columns: repeat(${headerConfig.hrefs.length}, auto);
+  grid-template-columns: repeat(${headerConfig.hrefs.length + 1}, auto);
 `;
 
 const HeaderNavigationItem = styled(Link)`
-  height: 100%;
+  position: relative;
+  height: ${headerConfig.height}px;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -74,7 +77,24 @@ const HeaderNavigationItem = styled(Link)`
   }
 `;
 
+const AvatarWrapper = styled.img`
+  border-radius: 50%;
+  height: 50%;
+  margin: 0 10px 0 0;
+`;
+
 function Header() {
+  const [user, setUser] = React.useState({});
+  if ((user === null || Object.keys(user).length === 0) && getCookie("token"))
+    getCurrentUser().then(setUser);
+
+  const localUser =
+    localStorage !== null
+      ? localStorage.user !== "undefined"
+        ? localStorage.user
+        : false
+      : false;
+
   return (
     <HeaderWrapper>
       <InnerHeaderWrapper>
@@ -83,10 +103,36 @@ function Header() {
         </Suspense>
         <HeaderNavigationWrapper>
           {headerConfig.hrefs.map((item) => (
-            <HeaderNavigationItem to={item[0]}>
+            <HeaderNavigationItem key={item} to={item[0]}>
               {item[1]}
             </HeaderNavigationItem>
           ))}
+          {getCookie("token") === "" ? (
+            <HeaderNavigationItem to="./login">
+              Aanmelden/Registreren
+            </HeaderNavigationItem>
+          ) : (
+            <HeaderNavigationItem
+              to={user || localUser ? "./account" : "/login"}
+            >
+              {(user || localUser) && (
+                <AvatarWrapper
+                  src={
+                    user.avatar ||
+                    (localStorage !== null
+                      ? localStorage.avatar !== "undefined"
+                        ? localStorage.avatar
+                        : false
+                      : false) ||
+                    "/images/defaultProfilePicture.png"
+                  }
+                />
+              )}
+              {user !== null || localUser
+                ? user.name || localUser
+                : "Aanmelden/Registreren"}
+            </HeaderNavigationItem>
+          )}
         </HeaderNavigationWrapper>
       </InnerHeaderWrapper>
     </HeaderWrapper>
