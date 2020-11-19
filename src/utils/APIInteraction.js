@@ -1,16 +1,5 @@
-import { getCookie, setCookie } from "./CookieInteraction";
-
 import axios from "axios";
-
-axios.defaults.baseURL =
-  process.env.NODE_ENV !== "production"
-    ? process.env.REACT_APP_BACKEND_URL_DEV
-    : process.env.REACT_APP_BACKEND_URL;
-
-const cookie = getCookie("token");
-
-axios.defaults.headers.common["auth-token"] = cookie;
-axios.defaults.headers.common["Content-Type"] = "application/json";
+import { setCookie } from "./CookieInteraction";
 
 const login = async (name, password) => {
   try {
