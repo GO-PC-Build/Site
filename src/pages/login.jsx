@@ -60,7 +60,6 @@ function LoginPage() {
 
   return (
     <PageWrapper>
-      <PageError>Oeps, er is iets mis gegaan bij ons!</PageError>
       {success === "server error" && (
         <PageError>Oeps, er is iets mis gegaan bij ons!</PageError>
       )}
