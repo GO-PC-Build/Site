@@ -85,6 +85,7 @@ const HeaderNavigationItem = styled(Link)`
 const AvatarWrapper = styled.img`
   border-radius: 50%;
   height: 50%;
+  max-width: 40px;
   margin: 0 10px 0 0;
 `;
 
@@ -120,7 +121,7 @@ function Header() {
 
   const localUser =
     localStorage !== null
-      ? localStorage.user !== "undefined"
+      ? typeof localStorage.user !== "undefined"
         ? localStorage.user
         : false
       : false;
@@ -151,7 +152,7 @@ function Header() {
                     src={
                       user.avatar ||
                       (localStorage !== null
-                        ? localStorage.avatar !== "undefined"
+                        ? typeof localStorage.avatar !== "undefined"
                           ? localStorage.avatar
                           : false
                         : false) ||

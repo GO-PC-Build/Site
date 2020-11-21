@@ -15,6 +15,7 @@ import { std } from "./theme/theme";
 // Page components
 const HomePage = lazy(() => import("./pages/index"));
 const LoginPage = lazy(() => import("./pages/login"));
+const DiscordVerify = lazy(() => import("./pages/discordVerify"));
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -149,10 +150,20 @@ function App() {
             )}
           />
           <Route exact path="/loading" component={Loading} />
-          <Route exact path="/logout" render={() => {
-            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            window.location.href = "/";
-          }} />
+          <Route
+            exact
+            path="/logout"
+            render={() => {
+              document.cookie =
+                "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              window.location.href = "/";
+            }}
+          />
+          <Route
+            exact
+            path="/verify"
+            component={DiscordVerify}
+          />
           <Route exact path="/index" render={() => <Redirect to="/" />} />
           <Redirect to="/" />
         </Switch>
@@ -162,3 +173,4 @@ function App() {
 }
 
 export default App;
+export {Loading}

@@ -1,15 +1,28 @@
+import { getCookie, setCookie } from "./CookieInteraction";
+
 import axios from "axios";
-import { setCookie } from "./CookieInteraction";
+
+axios.defaults.baseURL =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost:8080/go-pc-build/api/"
+    : "https://api.xiler.net/go-pc-build/api/";
 
 const login = async (name, password) => {
   try {
-    const res = await axios.post("user/login", {
-      name,
-      password,
-    });
+    const res = await axios.post(
+      "user/login",
+      {
+        name,
+        password,
+      },
+      {
+        headers: {
+          "auth-token": getCookie("token"),
+          "Content-Type": "application/json",
+        },
+      }
+    );
     setCookie("token", res.data, 14);
-    localStorage.setItem("user", res.data.name);
-    localStorage.setItem("avatar", res.data.avatar);
     return "logged in";
   } catch (err) {
     if (err.response.status === 400) return "invalid credentials";
@@ -19,10 +32,16 @@ const login = async (name, password) => {
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("@me");
+    const res = await axios.get("@me", {
+      headers: {
+        "auth-token": getCookie("token"),
+        "Content-Type": "application/json",
+      },
+    });
+    localStorage.setItem("user", res.data.name);
+    localStorage.setItem("avatar", res.data.avatar);
     return res.data;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
