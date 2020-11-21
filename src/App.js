@@ -148,16 +148,11 @@ function App() {
               </Layout>
             )}
           />
-          <Route
-            exact
-            path="/404"
-            render={() => (
-              <Layout title="404 - page not found">
-                <p>Oops no foundie sorry</p>
-              </Layout>
-            )}
-          />
           <Route exact path="/loading" component={Loading} />
+          <Route exact path="/logout" render={() => {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "/";
+          }} />
           <Route exact path="/index" render={() => <Redirect to="/" />} />
           <Redirect to="/" />
         </Switch>

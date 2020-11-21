@@ -44,10 +44,11 @@ function LoginPage() {
   };
 
   React.useEffect(() => {
-    if (user !== null || Object.keys(user).length !== 0)
-      return <Redirect to="/account" />;
     if (getCookie("token") === "") getCurrentUser().then(setUser);
   }, [user]);
+  
+  if (user !== null && Object.keys(user).length !== 0)
+    return <Redirect to="/account" />;
 
   if (success === "logged in")
     return (

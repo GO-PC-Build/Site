@@ -56,6 +56,7 @@ const HeaderIcon = styled.img`
 `;
 
 const HeaderNavigationWrapper = styled.nav`
+  position: relative;
   height: ${headerConfig.height}px;
   display: grid;
   grid-gap: 15px;
@@ -65,15 +66,19 @@ const HeaderNavigationWrapper = styled.nav`
 const HeaderNavigationItem = styled(Link)`
   position: relative;
   height: ${headerConfig.height}px;
+  background-color: ${std.main};
   display: flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
   color: ${std.tint};
   padding: 0 10px;
   transition: background-color 0.128s ease-in-out;
+  text-align: center;
+  z-index: 2;
 
   &:hover {
-    background-color: ${std.lightup + "50"};
+    background-color: ${std.darkLightup};
   }
 `;
 
@@ -81,6 +86,31 @@ const AvatarWrapper = styled.img`
   border-radius: 50%;
   height: 50%;
   margin: 0 10px 0 0;
+`;
+
+const OutterAccountWrapper = styled.div`
+  position: relative;
+
+  &:hover div {
+    top: ${headerConfig.height}px;
+  }
+`;
+
+const AccountWrapper = styled.div`
+  background-color: ${std.main};
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -${headerConfig.height}px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 1;
+  transition: top 0.25s ease-in-out;
+
+  a:last-child {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
 `;
 
 function Header() {
@@ -112,26 +142,38 @@ function Header() {
               Aanmelden/Registreren
             </HeaderNavigationItem>
           ) : (
-            <HeaderNavigationItem
-              to={user || localUser ? "./account" : "/login"}
-            >
+            <OutterAccountWrapper>
+              <HeaderNavigationItem
+                to={user || localUser ? "./account" : "/login"}
+              >
+                {(user || localUser) && (
+                  <AvatarWrapper
+                    src={
+                      user.avatar ||
+                      (localStorage !== null
+                        ? localStorage.avatar !== "undefined"
+                          ? localStorage.avatar
+                          : false
+                        : false) ||
+                      "/images/defaultProfilePicture.png"
+                    }
+                  />
+                )}
+                {user !== null || localUser
+                  ? user.name || localUser
+                  : "Aanmelden/Registreren"}
+              </HeaderNavigationItem>
               {(user || localUser) && (
-                <AvatarWrapper
-                  src={
-                    user.avatar ||
-                    (localStorage !== null
-                      ? localStorage.avatar !== "undefined"
-                        ? localStorage.avatar
-                        : false
-                      : false) ||
-                    "/images/defaultProfilePicture.png"
-                  }
-                />
+                <AccountWrapper>
+                  <HeaderNavigationItem to="./account">
+                    Mijn account
+                  </HeaderNavigationItem>
+                  <HeaderNavigationItem to="./logout">
+                    Afmelden
+                  </HeaderNavigationItem>
+                </AccountWrapper>
               )}
-              {user !== null || localUser
-                ? user.name || localUser
-                : "Aanmelden/Registreren"}
-            </HeaderNavigationItem>
+            </OutterAccountWrapper>
           )}
         </HeaderNavigationWrapper>
       </InnerHeaderWrapper>
