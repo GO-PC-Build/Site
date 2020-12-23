@@ -4,8 +4,8 @@ import axios from "axios";
 
 axios.defaults.baseURL =
   process.env.NODE_ENV !== "production"
-    ? "http://localhost:8080/go-pc-build/api/"
-    : "https://api.xiler.net/go-pc-build/api/";
+    ? "http://localhost:8080/go-pc-build/"
+    : "https://api.xiler.net/go-pc-build/";
 
 const login = async (name, password) => {
   try {
